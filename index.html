@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="ja">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>yasagurebug</title>
+  <script type="text/javascript" nonce="98f9ecd24bd445bab5ebafc5ee8"
+    src="//local.adguard.org?ts=1774127577444&amp;type=content-script&amp;dmn=contribution.usercontent.google.com&amp;url=https%3A%2F%2Fcontribution.usercontent.google.com%2Fdownload%3Fc%3DCgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzM1OGM0YjZmZGZkYTRkMzFhZjc4YTE0YTE1YjMxYmYzEgsSBxDHm77IzB0YAZIBIwoKcHJvamVjdF9pZBIVQhMzNDU4Mzk5MTM5NDI0ODg0MjU4%26filename%3D%26opi%3D89354086&amp;app=chrome.exe&amp;css=3&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=1"></script>
+  <script type="text/javascript" nonce="98f9ecd24bd445bab5ebafc5ee8"
+    src="//local.adguard.org?ts=1774127577444&amp;name=AdGuard%20Extra&amp;type=user-script"></script>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Manrope:wght@300;400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#00F5FF",
+            "secondary": "#d575ff",
+            "tertiary": "#ff6b98",
+            "background": "#0c0e17",
+            "surface": "rgba(17, 19, 29, 0.7)",
+            "on-background": "#f0f0fd",
+            "on-surface": "#aaaab7",
+            "outline": "rgba(70, 71, 82, 0.5)"
+          },
+          fontFamily: {
+            "headline": ["Space Grotesk", "sans-serif"],
+            "body": ["Manrope", "sans-serif"],
+            "label": ["Plus Jakarta Sans", "sans-serif"]
+          },
+          borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "9999px" },
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      background-color: #0c0e17;
+      color: #f0f0fd;
+      font-family: 'Manrope', 'sans-serif';
+      background-image:
+        linear-gradient(rgba(0, 245, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 245, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    /* Scanline Effect */
+    .scanlines {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .scanlines::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%,
+          rgba(0, 0, 0, 0.1) 50%);
+      background-size: 100% 4px;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Cyber Card Decorations */
+    .cyber-card {
+      position: relative;
+      backdrop-filter: blur(8px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .cyber-card::before,
+    .cyber-card::after {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border: 1px solid #00F5FF;
+      pointer-events: none;
+      opacity: 0.5;
+      transition: all 0.3s ease;
+    }
+
+    .cyber-card::before {
+      top: -1px;
+      left: -1px;
+      border-right: none;
+      border-bottom: none;
+    }
+
+    .cyber-card::after {
+      bottom: -1px;
+      right: -1px;
+      border-left: none;
+      border-top: none;
+    }
+
+    .cyber-card:hover {
+      transform: translateY(-4px) scale(1.01);
+      border-color: #00F5FF;
+      box-shadow: 0 0 20px rgba(0, 245, 255, 0.15);
+    }
+
+    .cyber-card:hover::before,
+    .cyber-card:hover::after {
+      opacity: 1;
+      width: 20px;
+      height: 20px;
+      filter: drop-shadow(0 0 5px #00F5FF);
+    }
+
+    /* Subtle Glitch Animation */
+    @keyframes glitch {
+      0% {
+        transform: translate(0);
+        text-shadow: 1px 0 #d575ff, -1px 0 #00F5FF;
+      }
+
+      92% {
+        transform: translate(0);
+        text-shadow: 1px 0 #d575ff, -1px 0 #00F5FF;
+      }
+
+      93% {
+        transform: translate(-1px, 1px);
+        text-shadow: 2px 0 #d575ff, -2px 0 #00F5FF;
+      }
+
+      94% {
+        transform: translate(1px, -1px);
+        text-shadow: -2px 0 #d575ff, 2px 0 #00F5FF;
+      }
+
+      95% {
+        transform: translate(0);
+        text-shadow: 1px 0 #d575ff, -1px 0 #00F5FF;
+      }
+
+      100% {
+        transform: translate(0);
+        text-shadow: 1px 0 #d575ff, -1px 0 #00F5FF;
+      }
+    }
+
+    .glitch-anim {
+      animation: glitch 5s infinite linear;
+    }
+
+    /* Cyber Link Brackets - Always Visible */
+    .cyber-link-text {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .cyber-link-text::before {
+      content: '[';
+      margin-right: 6px;
+      opacity: 0.7;
+      color: #00F5FF;
+    }
+
+    .cyber-link-text::after {
+      content: ']';
+      margin-left: 6px;
+      opacity: 0.7;
+      color: #d575ff;
+    }
+
+    .neon-text-hover:hover {
+      background: linear-gradient(90deg, #00F5FF, #d575ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 8px rgba(0, 245, 255, 0.5));
+    }
+
+    .icon-glow {
+      filter: drop-shadow(0 0 5px currentColor);
+    }
+  </style>
+</head>
+
+<body class="selection:bg-primary/30 selection:text-primary">
+  <main class="max-w-3xl mx-auto pb-32">
+    <!-- 1. ヘッダー画像とタイトルのオーバーレイ -->
+    <header class="relative w-full h-[350px] md:h-[450px] overflow-hidden mb-16">
+      <img alt="ヘッダーバナー" class="w-full h-full object-cover" src="./images/header-banner.png" style="" />
+      <div class="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent"></div>
+      <div class="absolute inset-0 flex flex-col items-center justify-end pb-12 px-6 text-center">
+        <h1 class="font-headline text-5xl md:text-7xl font-bold tracking-tighter glitch-anim mb-4 drop-shadow-2xl"
+          style="text-shadow: 2px 0 #d575ff, -2px 0 #00F5FF, 0 0 20px rgba(213, 117, 255, 0.5);">yasagurebug</h1>
+        <p class="font-body text-lg md:text-xl text-on-background italic font-medium opacity-90"
+          style="text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);">
+          虚ろな顔と逆に　アホなコメ弾む心
+        </p>
+      </div>
+    </header>
+    <div class="px-6 space-y-20">
+      <!-- 3. プロフィール -->
+      <section class="space-y-8">
+        <h2 class="font-headline text-xs font-bold tracking-[0.3em] text-primary uppercase flex items-center gap-4"
+          style="">
+          <span class="h-[1px] w-8 bg-primary/40"></span>
+          プロフィール
+        </h2>
+        <div class="grid gap-6">
+          <a class="cyber-card scanlines flex items-center gap-4 p-6 bg-surface rounded-lg border border-outline group"
+            href="mailto:yasagurebug@gmail.com" style="">
+            <span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform icon-glow"
+              style="">mail</span>
+            <div>
+              <p class="text-[10px] text-on-surface uppercase tracking-[0.2em] font-label mb-1 opacity-70" style="">
+                E-MAIL</p>
+              <p class="font-headline font-medium neon-text-hover transition-all" style="">yasagurebug@gmail.com</p>
+            </div>
+          </a>
+          <a class="cyber-card scanlines flex items-center gap-4 p-6 bg-surface rounded-lg border border-outline group"
+            href="https://x.com/youbeer1" style="" target="_blank">
+            <svg class="w-6 h-6 fill-current text-primary group-hover:scale-110 transition-transform icon-glow"
+              viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z">
+              </path>
+            </svg>
+            <div>
+              <p class="text-[10px] text-on-surface uppercase tracking-[0.2em] font-label mb-1 opacity-70" style="">X /
+                TWITTER</p>
+              <p class="font-headline font-medium neon-text-hover transition-all" style="">@youbeer1</p>
+            </div>
+          </a>
+        </div>
+      </section>
+      <!-- 4. 動画 -->
+      <section class="space-y-8">
+        <h2 class="font-headline text-xs font-bold tracking-[0.3em] text-primary uppercase flex items-center gap-4"
+          style="">
+          <span class="h-[1px] w-8 bg-primary/40"></span>
+          動画
+        </h2>
+        <div class="cyber-card scanlines p-8 bg-surface rounded-lg border border-outline group">
+          <div class="flex items-center gap-2 mb-6">
+            <a class="flex justify-between items-center w-full" href="https://www.youtube.com/@%E3%81%B0%E3%81%90bug"
+              style="" target="_blank">
+              <h3 class="font-headline text-2xl font-bold cyber-link-text neon-text-hover transition-all" style="">
+                YouTube チャンネル</h3>
+              <svg class="w-8 h-8 fill-current text-on-surface group-hover:text-primary transition-colors icon-glow"
+                viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z">
+                </path>
+              </svg>
+            </a>
+          </div>
+          <p class="text-on-surface leading-relaxed text-sm" style="">VTuber切り抜き。しののめにこさん、瑠川ねぎさん、白玉うなさん</p>
+        </div>
+      </section>
+      <!-- 5. サイト -->
+      <section class="space-y-8">
+        <h2 class="font-headline text-xs font-bold tracking-[0.3em] text-primary uppercase flex items-center gap-4"
+          style="">
+          <span class="h-[1px] w-8 bg-primary/40"></span>
+          サイト
+        </h2>
+        <div class="cyber-card scanlines p-8 bg-surface rounded-lg border border-outline group">
+          <div class="flex items-center gap-2 mb-6">
+            <a class="flex justify-between items-center w-full" href="https://sino-nator.vercel.app/" style=""
+              target="_blank">
+              <h3 class="font-headline text-2xl font-bold cyber-link-text neon-text-hover transition-all" style="">
+                シノネーター</h3>
+              <span
+                class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors icon-glow"
+                style="font-size: 32px;">language</span>
+            </a>
+          </div>
+          <p class="text-on-surface leading-relaxed text-sm" style="">しののめにこさんの過去アーカイブをアキネーター風におすすめするサイト</p>
+        </div>
+      </section>
+      <!-- 6. ツール -->
+      <section class="space-y-8">
+        <h2 class="font-headline text-xs font-bold tracking-[0.3em] text-primary uppercase flex items-center gap-4"
+          style="">
+          <span class="h-[1px] w-8 bg-primary/40"></span>
+          ツール
+        </h2>
+        <div class="grid gap-6">
+          <div class="cyber-card scanlines p-8 bg-surface rounded-lg border border-outline group">
+            <div class="flex justify-between items-start mb-6">
+              <a class="flex justify-between items-center w-full" href="https://github.com/yasagurebug/kirinico"
+                style="" target="_blank">
+                <h3 class="font-headline text-2xl font-bold cyber-link-text neon-text-hover transition-all" style="">
+                  Kirinico</h3>
+                <svg class="w-7 h-7 fill-current text-on-surface group-hover:text-primary transition-colors icon-glow"
+                  viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12">
+                  </path>
+                </svg>
+              </a>
+            </div>
+            <p class="text-on-surface text-sm leading-relaxed" style="">
+              単色背景から前景を切り抜いて、透過 PNG を作るための Windows デスクトップツール。
+              <span class="block mt-2 opacity-80">アンチエイリアスで輪郭が背景と融合してしまっていたり、MPEG/JPEGノイズで輪郭が汚れている画像に特化しています。</span>
+            </p>
+          </div>
+          <div class="cyber-card scanlines p-8 bg-surface rounded-lg border border-outline group">
+            <div class="flex justify-between items-start mb-6">
+              <a class="flex justify-between items-center w-full" href="https://github.com/yasagurebug/LiveAlert"
+                style="" target="_blank">
+                <h3 class="font-headline text-2xl font-bold cyber-link-text neon-text-hover transition-all" style="">
+                  LiveAlert</h3>
+                <svg class="w-7 h-7 fill-current text-on-surface group-hover:text-primary transition-colors icon-glow"
+                  viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12">
+                  </path>
+                </svg>
+              </a>
+            </div>
+            <p class="text-on-surface text-sm leading-relaxed" style="">
+              YouTube のライブ開始をポーリングで検知し、エ〇ァ風の警告帯と音声/BGM で知らせるアプリ。
+              <span class="block mt-2 opacity-80">Android 版は X（旧Twitter）の Space 通知検知にも対応しています。Windows 版は YouTube
+                専用です。</span>
+            </p>
+          </div>
+        </div>
+      </section>
+      <!-- 7. その他 -->
+      <section class="space-y-8">
+        <h2 class="font-headline text-xs font-bold tracking-[0.3em] text-primary uppercase flex items-center gap-4"
+          style="">
+          <span class="h-[1px] w-8 bg-primary/40"></span>
+          その他
+        </h2>
+        <div class="space-y-6">
+          <div class="cyber-card scanlines p-8 bg-surface rounded-lg border border-outline group">
+            <a class="flex justify-between items-center w-full mb-4"
+              href="https://docs.google.com/spreadsheets/d/1C-YN4NrHvdWGccHdw3T5Paeu0iuAFM7SI7C-ke70sXg/" style=""
+              target="_blank">
+              <h3 class="font-headline text-2xl font-bold cyber-link-text neon-text-hover transition-all" style="">
+                しののめにこ配信データベース</h3>
+              <span
+                class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors icon-glow"
+                style="font-size: 28px;">table_chart</span>
+            </a>
+            <p class="text-on-surface text-sm opacity-80" style="">配信をまとめた Google SpreadSheet です。タイムスタンプからAI生成した要約を含みます。
+            </p>
+          </div>
+          <div class="cyber-card scanlines p-8 bg-surface rounded-lg border border-outline group">
+            <a class="flex justify-between items-center w-full mb-4" href="https://note.com/yasagurebug/n/nd5c6bc5f563c"
+              target="_blank">
+              <h3 class="font-headline text-2xl font-bold cyber-link-text neon-text-hover transition-all">
+                ジオゲッサーの「日本マップ」、本当の最初の一歩</h3>
+              <span
+                class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors icon-glow"
+                style="font-size: 28px;">description</span>
+            </a>
+            <p class="text-on-surface text-sm opacity-80">そもそもどうやってプレイしたらいいのか分からないレベルから、ジオゲッサー日本マップを始めるためのガイドです。</p>
+          </div>
+          <div class="cyber-card scanlines p-8 bg-surface rounded-lg border border-outline group">
+            <a class="flex justify-between items-center w-full mb-4" href="https://note.com/yasagurebug/all"
+              target="_blank">
+              <h3 class="font-headline text-2xl font-bold cyber-link-text neon-text-hover transition-all">その他の駄文</h3>
+              <span
+                class="material-symbols-outlined text-on-surface group-hover:text-primary transition-colors icon-glow"
+                style="font-size: 28px;">description</span>
+            </a>
+            <p class="text-on-surface text-sm opacity-80">しょうもないパロディやちょっとした短編？など。</p>
+          </div>
+        </div>
+      </section>
+    </div>
+    <footer
+      class="mt-24 pt-12 border-t border-primary/10 text-center text-[10px] text-on-surface/40 font-label tracking-widest uppercase pb-12">
+      © 2024 YASAGUREBUG // SYSTEM ACCESS GRANTED
+    </footer>
+  </main>
+</body>
+
+</html>
